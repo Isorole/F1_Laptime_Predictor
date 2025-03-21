@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HM Analysis</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Axios for making HTTP requests -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(90deg, #141E30, #243B55);
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    .info-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      margin: 20px;
+      border-radius: 8px;
+    }
+    canvas {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+    }
+    label {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HM Analysis</h1>
+    <nav>
+      <a href="#lapTimes">Lap Times &amp; Predict</a>
+      <a href="#lapDistribution">Lap Time Distribution</a>
+      <a href="#driverStyling">Driver Styling</a>
+    </nav>
+  </header>
+  <main>
+         <!--Lap Times Section (with Prediction)--->
+    <section id="lapTimes" class="info-section">
+      <h2>Lap Times</h2>
+      <!-- Real Lap Times Inputs -->
+      <label>Year:
+        <select id="yearLap">
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+        </select>
+      </label>
+      <label>Race:
+        <select id="raceLap">
+          <option value="Bahrain">Bahrain</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Belgian">Belgian</option>
+          <option value="Abu Dhabi">Abu Dhabi</option>
+          <option value="Azerbaijan">Azerbaijan</option>
+          <option value="British">British</option>
+          <option value="Canada">Canada</option>
+          <option value="Chinese">Chinese</option>
+          <option value="Dutch">Dutch</option>
+          <option value="Emilia Romagna">Emilia Romagna</option>
+          <option value="French">French (20,21)</option>
+          <option value="Hungarian">Hungarian</option>
+          <option value="Italian">Italian</option>
+          <option value="Las Vegas">Las Vegas</option>
+          <option value="Mexico City">Mexico City</option>
+          <option value="Miami">Miami</option>
+          <option value="Monaco">Monaco</option>
+          <option value="Portuguese">Portuguese (2020,21)</option>
+          <option value="Qatar">Qatar</option>
+          <option value="Austrian">Austrian</option>
+          <option value="Russian">Russian (20,21)</option>
+          <option value="Sao Paulo">Sao Paulo</option>
+          <option value="Saudi Arabian">Saudi Arabian</option>
+          <option value="Singapore">Singaporean GP</option>
+          <option value="Spanish">Spanish</option>
+          <option value="United States">United States</option>
+
+        </select>
+      </label>
+      <label>Session:
+        <select id="sessionLap">
+          <option value="R">Race</option>
+          <option value="Q">Quali</option>
+          <option value="FP1">FP1</option>
+          <option value="FP2">FP2</option>
+          <option value="FP3">FP3</option>
+        </select>
+      </label>
+      <label>Driver:
+        <select id="driverLap">
+          <option value="VER">VER</option>
+          <option value="PER">PER</option>
+          <option value="HAM">HAM</option>
+          <option value="ALO">ALO</option>
+          <option value="SAI">SAI</option>
+          <option value="LEC">LEC</option>
+        </select>
+      </label>
+      <br/><br/>
+      <button onclick="getLapTimes()">Load Lap Times</button>
+      <canvas id="lapTimeChart"></canvas>
+
+      <!-- =========================================
+           Prediction Section
+           =========================================-->
+      <hr />
+      <h2>Predict Lap Times</h2>
+      <div style="border:1px solid #fff; padding:10px; margin-bottom:10px;">
+        <!-- Additional fields to pick year/race/session for the model -->
+        <label>Race (Model):
+          <select id="racePredict">
+            <option value="Belgian">Belgian</option>
+            <option value="Bahrain">Bahrain</option>
+            <option value="Abu Dhabi">Abu Dhabi</option>
+            <option value="Azerbaijan">Azerbaijan</option>
+            <option value="British">British</option>
+            <option value="Canada">Canada</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Dutch">Dutch</option>
+            <option value="Emilia Romagna">Emilia Romagna</option>
+            <option value="French">French (20,21)</option>
+            <option value="Hungarian">Hungarian</option>
+            <option value="Italian">Italian</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Las Vegas">Las Vegas</option>
+            <option value="Mexico City">Mexico City</option>
+            <option value="Miami">Miami</option>
+            <option value="Monaco">Monaco</option>
+            <option value="Portuguese">Portuguese (2020,21)</option>
+            <option value="Qatar">Qatar</option>
+            <option value="Austrian">Austrian</option>
+            <option value="Russian">Russian (20,21)</option>
+            <option value="Sao Paulo">Sao Paulo</option>
+            <option value="Saudi Arabian">Saudi Arabian</option>
+            <option value="Singapore">Singaporean GP</option>
+            <option value="Spanish">Spanish</option>
+            <option value="United States">United States</option>
+
+          </select>
+        </label>
+        <label>Session (Model):
+          <select id="sessionPredict">
+            <option value="R">Race</option>
+            <option value="Q">Quali</option>
+          </select>
+        </label>
+        <br/><br/>
+
+        <!-- Actual predictor form -->
+        <label>Start Lap: <input type="number" id="startLap" /></label>
+        <label>Number of Laps: <input type="number" id="numLaps" /></label>
+        <label>Compound:
+          <select id="compound">
+            <option value="SOFT">SOFT</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="HARD">HARD</option>
+          </select>
+        </label>
+        <button onclick="predictLapTimes()">Predict</button>
+      </div>
+      <h3>Predicted Results</h3>
+      <ul id="result"></ul>
+
+      <!-- Visualise the predicted data in a new scatter chart -->
+      <button onclick="visualisePredictions()">Visualise Predicted</button>
+      <button onclick="compareLapTimes()">Compare Real vs Predicted</button>
+      <canvas id="predictedChart"></canvas>
+    </section>
+
+    <!-- =========================================================
+         Lap Time Distribution Section
+         =========================================================-->
+    <section id="lapDistribution" class="info-section">
+      <h2>Lap Time Distribution</h2>
+      <label>Year:
+        <select id="yearDist">
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+        </select>
+      </label>
+      <label>Race:
+        <select id="raceDist">
+          <option value="Bahrain">Bahrain</option>
+          <option value="Belgian">Belgian</option>
+          <option value="Abu Dhabi">Abu Dhabi</option>
+          <option value="Azerbaijan">Azerbaijan</option>
+          <option value="British">British</option>
+          <option value="Canada">Canada</option>
+          <option value="Chinese">Chinese</option>
+          <option value="Dutch">Dutch</option>
+          <option value="Emilia Romagna">Emilia Romagna</option>
+          <option value="French">French (20,21)</option>
+          <option value="Hungarian">Hungarian</option>
+          <option value="Italian">Italian</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Las Vegas">Las Vegas</option>
+          <option value="Mexico City">Mexico City</option>
+          <option value="Miami">Miami</option>
+          <option value="Monaco">Monaco</option>
+          <option value="Portuguese">Portuguese (2020,21)</option>
+          <option value="Qatar">Qatar</option>
+          <option value="Austrian">Austrian</option>
+          <option value="Russian">Russian (20,21)</option>
+          <option value="Sao Paulo">Sao Paulo</option>
+          <option value="Saudi Arabian">Saudi Arabian</option>
+          <option value="Singapore">Singaporean GP</option>
+          <option value="Spanish">Spanish</option>
+          <option value="United States">United States</option>
+        </select>
+      </label>
+      <label>Session:
+        <select id="sessionDist">
+          <option value="R">Race</option>
+          <option value="Q">Quali</option>
+          <option value="FP1">FP1</option>
+          <option value="FP2">FP2</option>
+          <option value="FP3">FP3</option>
+        </select>
+      </label>
+      <label>Driver:
+        <select id="driverDist">
+          <option value="VER">VER</option>
+          <option value="PER">PER</option>
+          <option value="HAM">HAM</option>
+          <option value="ALO">ALO</option>
+          <option value="SAI">SAI</option>
+          <option value="LEC">LEC</option>
+        </select>
+      </label>
+      <br/><br/>
+      <button onclick="getLapDistribution()">Load Distribution</button>
+      <canvas id="lapDistributionChart"></canvas>
+    </section>
+
+    <!-- =========================================================
+         Driver Styling Section
+         =========================================================-->
+    <section id="driverStyling" class="info-section">
+      <h2>Driver Performance Styling</h2>
+      <label>Year:
+        <select id="yearStyle">
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+        </select>
+      </label>
+      <label>Race:
+        <select id="raceStyle">
+          <option value="Bahrain">Bahrain</option>
+          <option value="Abu Dhabi">Abu Dhabi</option>
+          <option value="Azerbaijan">Azerbaijan</option>
+          <option value="British">British</option>
+          <option value="Canada">Canada</option>
+          <option value="Chinese">Chinese</option>
+          <option value="Dutch">Dutch</option>
+          <option value="Emilia Romagna">Emilia Romagna</option>
+          <option value="French">French (20,21)</option>
+          <option value="Hungarian">Hungarian</option>
+          <option value="Italian">Italian</option>
+          <option value="Japanese">Japanese</option>
+          <option value="Las Vegas">Las Vegas</option>
+          <option value="Mexico City">Mexico City</option>
+          <option value="Miami">Miami</option>
+          <option value="Monaco">Monaco</option>
+          <option value="Portuguese">Portuguese (2020,21)</option>
+          <option value="Qatar">Qatar</option>
+          <option value="Austrian">Austrian</option>
+          <option value="Russian">Russian (20,21)</option>
+          <option value="Sao Paulo">Sao Paulo</option>
+          <option value="Saudi Arabian">Saudi Arabian</option>
+          <option value="Singapore">Singaporean GP</option>
+          <option value="Spanish">Spanish</option>
+          <option value="United States">United States</option>
+        </select>
+      </label>
+      <label>Session:
+        <select id="sessionStyle">
+          <option value="R">Race</option>
+          <option value="Q">Quali</option>
+          <option value="FP1">FP1</option>
+          <option value="FP2">FP2</option>
+          <option value="FP3">FP3</option>
+        </select>
+      </label>
+      <label>Driver:
+        <select id="driverStyle">
+          <option value="VER">VER</option>
+          <option value="PER">PER</option>
+          <option value="HAM">HAM</option>
+          <option value="ALO">ALO</option>
+          <option value="SAI">SAI</option>
+          <option value="LEC">LEC</option>
+        </select>
+      </label>
+      <br/><br/>
+      <button onclick="getDriverStyling()">Load Driver Styling</button>
+      <canvas id="driverStyleChart"></canvas>
+    </section>
+  </main>
+
+  <script>
+    /*GLOBAL CHARTS*/
+    let positionChart, lapTimeChart, lapDistributionChart, driverStyleChart, predictedChart;
+    let predictedData = [];   // store predicted laps here
+    let realLapData = [];     // store real lap times (in minutes) for Compare
+
+    // A helper to format decimal minutes -> "MM:SS.sss"
+    function formatMinutesToMMSSmmm(decimalMinutes) {
+      const mm = Math.floor(decimalMinutes);
+      const sec = (decimalMinutes - mm) * 60;
+      return `${mm}:${sec.toFixed(3)}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+
+      /*2) Lap Times (Scatter)*/
+      const ctx2 = document.getElementById('lapTimeChart').getContext('2d');
+      lapTimeChart = new Chart(ctx2, {
+        type: 'scatter',
+        data: { datasets: [] },
+        options: {
+          scales: {
+            x: { title: { display: true, text: 'Lap Number' } },
+            y: {
+              title: { display: true, text: 'Lap Time' },
+              ticks: {
+                callback: function(value, index, values) {
+                  // value is in decimal minutes
+                  return formatMinutesToMMSSmmm(value);
+                }
+              }
+            }
+          }
+        }
+      });
+
+      /*3) Lap Distribution (Bar)*/
+      const ctx3 = document.getElementById('lapDistributionChart').getContext('2d');
+      lapDistributionChart = new Chart(ctx3, {
+        type: 'bar',
+        data: { labels: [], datasets: [] },
+        options: {
+          scales: {
+            x: {
+              title: { display: true, text: 'Lap Time' },
+              ticks: {
+                callback: function(value, index, values) {
+                  const decimalMinutes = value;
+                  return formatMinutesToMMSSmmm(decimalMinutes);
+                }
+              }
+            },
+            y: { title: { display: true, text: 'Frequency' } }
+          }
+        }
+      });
+
+      /*4) Driver Styling (Radar)*/
+      const ctx4 = document.getElementById('driverStyleChart').getContext('2d');
+      driverStyleChart = new Chart(ctx4, {
+        type: 'radar',
+        data: { labels: [], datasets: [] },
+        options: {
+          scales: {
+            r: {
+              angleLines: { display: true },
+              suggestedMin: 0,
+              suggestedMax: 5,
+              ticks: {
+                callback: function(value, index, values) {
+                  return formatMinutesToMMSSmmm(value);
+                }
+              }
+            }
+          }
+        }
+      });
+
+      /*5) Predicted Lap Times (Scatter)*/
+      const ctx5 = document.getElementById('predictedChart').getContext('2d');
+      predictedChart = new Chart(ctx5, {
+        type: 'scatter',
+        data: { datasets: [] },
+        options: {
+          scales: {
+            x: { title: { display: true, text: 'Lap' } },
+            y: {
+              title: { display: true, text: 'Lap Time' },
+              ticks: {
+                callback: function(value, index, values) {
+                  return formatMinutesToMMSSmmm(value);
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+
+
+    /*LAP TIMES (REAL) => Convert sec -> decimal minutes*/
+    function getLapTimes() {
+      let year = document.getElementById('yearLap').value;
+      let race = document.getElementById('raceLap').value;
+      let session = document.getElementById('sessionLap').value;
+      let driver = document.getElementById('driverLap').value;
+
+      axios.get("/api/driver_laptimes", {
+        params: { year, race, session_type: session, driver }
+      })
+      .then(response => {
+        // shape: { dataset: { label, data: [ {x, y}, ... ] } }
+        const data = response.data;
+
+        // store new array for chart
+        realLapData = data.dataset.data.map(pt => {
+          return { x: pt.x, y: pt.y / 60.0 };  // sec -> min
+        });
+
+        // show in chart
+        lapTimeChart.data.datasets = [
+          {
+            label: data.dataset.label + " (Real)",
+            data: realLapData,
+            showLine: true,
+            borderColor: "black",
+            backgroundColor: "blue"
+          }
+        ];
+        lapTimeChart.update();
+      })
+      .catch(error => {
+        console.error("Error fetching lap times:", error);
+        alert("Failed to load lap times.");
+      });
+    }
+
+    /*LAP TIMES DISTRIBUTION => Convert bin edges from sec->min*/
+    function getLapDistribution() {
+      let year = document.getElementById('yearDist').value;
+      let race = document.getElementById('raceDist').value;
+      let session = document.getElementById('sessionDist').value;
+      let driver = document.getElementById('driverDist').value;
+
+      axios.get("/api/laptimes_distribution", {
+        params: { year, race, session_type: session, driver }
+      })
+      .then(response => {
+        const data = response.data; // { binEdges: [...], binCounts: [...] }
+
+        // Convert each bin edge from sec->min
+        let binEdgesMin = data.binEdges.map(sec => sec / 60.0);
+
+        lapDistributionChart.data.labels = binEdgesMin;
+        lapDistributionChart.data.datasets = [
+          {
+            label: `Lap Time Distribution (${driver})`,
+            data: data.binCounts,
+            backgroundColor: 'rgba(255,99,132,0.6)'
+          }
+        ];
+        lapDistributionChart.update();
+      })
+      .catch(error => {
+        console.error("Error fetching lap distribution:", error);
+        alert("Failed to load lap distribution.");
+      });
+    }
+
+    /*DRIVER STYLING => Convert sec->min*/
+    function getDriverStyling() {
+      let year = document.getElementById('yearStyle').value;
+      let race = document.getElementById('raceStyle').value;
+      let session = document.getElementById('sessionStyle').value;
+      let driver = document.getElementById('driverStyle').value;
+
+      axios.get("/api/driver_styling", {
+        params: { year, race, session_type: session, driver }
+      })
+      .then(response => {
+        // shape: { labels: [...], dataset: { data: [...], backgroundColor: [...], ... } }
+        const data = response.data;
+
+        // Convert each data value from sec -> decimal min
+        let newData = data.dataset.data.map(seconds => seconds / 60.0);
+
+        driverStyleChart.data.labels = data.labels;
+        driverStyleChart.data.datasets = [
+          {
+            ...data.dataset,
+            data: newData
+          }
+        ];
+        driverStyleChart.update();
+      })
+      .catch(error => {
+        console.error("Error fetching driver styling:", error);
+        alert("Failed to load driver styling.");
+      });
+    }
+
+    /*PREDICT LAP TIMES Now we also send yearPredict, racePredict, sessionPredict*/
+    function predictLapTimes() {
+      let startLap = document.getElementById("startLap").value;
+      let numLaps = document.getElementById("numLaps").value;
+      let compound = document.getElementById("compound").value;
+
+      let racePredict = document.getElementById("racePredict").value;
+      let sessionPredict = document.getElementById("sessionPredict").value;
+
+      axios.post("/predict", {
+        start_lap: startLap,
+        num_laps: numLaps,
+        compound: compound,
+        racePredict: racePredict,
+        sessionPredict: sessionPredict
+      })
+      .then(response => {
+        console.log("Prediction Response:", response.data);
+        let resultElement = document.getElementById("result");
+        resultElement.innerHTML = ""; // Clear previous results
+        predictedData = []; // Clear old predicted data
+
+        // response.data.lap_times = [ {lap, time="MM:SS.mmm"}, ... ]
+        response.data.lap_times.forEach(item => {
+          // Display textual results
+          let listItem = document.createElement("li");
+          listItem.innerText = `Lap ${item.lap}: ${item.time}`;
+          resultElement.appendChild(listItem);
+
+          // Convert "MM:SS.mmm" -> decimal minutes
+          let parts = item.time.split(':'); // e.g. "01:35.200" => ["01","35.200"]
+          let mm = parseFloat(parts[0]);
+          let ss_mmm = parseFloat(parts[1]);
+          let totalMinutes = mm + (ss_mmm / 60.0);
+
+          predictedData.push({ x: item.lap, y: totalMinutes });
+        });
+      })
+      .catch(error => {
+        console.error("Prediction Error:", error);
+        alert("Prediction failed");
+      });
+    }
+
+    /*VISUALISE ONLY PREDICTED LAPS (Separate Chart)*/
+    function visualisePredictions() {
+      if (!predictedData || predictedData.length === 0) {
+        alert("No predicted data found. Please click 'Predict' first.");
+        return;
+      }
+      predictedChart.data.datasets = [
+        {
+          label: 'Predicted Lap Times',
+          data: predictedData,
+          showLine: true,
+          borderColor: 'rgba(0, 255, 0, 1)',
+          backgroundColor: 'rgba(0, 255, 0, 0.6)'
+        }
+      ];
+      predictedChart.update();
+    }
+
+    /*COMPARE REAL VS. PREDICTED ON THE SAME CHART We'll just reuse the 'lapTimeChart'*/
+    function compareLapTimes() {
+      if (realLapData.length === 0) {
+        alert("Load real lap times first!");
+        return;
+      }
+      if (predictedData.length === 0) {
+        alert("Predict lap times first!");
+        return;
+      }
+
+      // We have realLapData + predictedData
+      // Let's put them in the same chart
+      lapTimeChart.data.datasets = [
+        {
+          label: 'Real Lap Times',
+          data: realLapData,
+          showLine: true,
+          borderColor: 'black',
+          backgroundColor: 'blue'
+        },
+        {
+          label: 'Predicted Lap Times',
+          data: predictedData,
+          showLine: true,
+          borderColor: 'rgba(0,255,0,1)',
+          backgroundColor: 'rgba(0,255,0,0.6)'
+        }
+      ];
+      lapTimeChart.update();
+    }
+  </script>
+</body>
+</html>

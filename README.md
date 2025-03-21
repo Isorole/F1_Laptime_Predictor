@@ -1,0 +1,1 @@
+This is a LSTM based ANN model which predicts lap time of various Formula 1 race. It is made on flask backend to show graph and compare from the real-world lap time produced. The data is from FastF1 API.    
