@@ -16,32 +16,32 @@ fastf1.Cache.enable_cache("E:/python codes/cache")
 # A dictionary of model paths keyed by (race, session)
 # so you can pick the correct model automatically
 MODEL_PATHS = {
-    ("Bahrain", "R"): "E:/fastf1_csv_data/models/Bahrain Grand Prix_Race.h5",
-    ("Belgian", "R"): "E:/fastf1_csv_data/models/Belgian Grand Prix_Race.h5",
-    ("Austrain", "R") : "E:/fastf1_csv_data/models/Austrian Grand Prix_Race.h5.h5",
-    ("Abu Dhabi","R") : "E:/fastf1_csv_data/models/Abu Dhabi Grand Prix_Race.h5",
-    ("British", "R") : "E:/fastf1_csv_data/models/British Grand Prix.h5",
-    ("Canada", "R") : "E:/fastf1_csv_data/models/Canadian Grand Prix.h5",
-    ("Azerbaijan", "R") : "E:/fastf1_csv_data/models/Azerbaijan Grand Prix.h5",
-    ("Chinese", "R") : "E:/fastf1_csv_data/models/Chinese Grand Prix.h5",
-    ("Dutch", "R") : "E:/fastf1_csv_data/models/Dutch Grand Prix.h5",
-    ("Emilia Romagna","R") : "E:/fastf1_csv_data/models/Emilia Romagna Grand Prix.h5",
-    ("French", "R") : "E:/fastf1_csv_data/models/French Grand Prix.h5",
-    ("Hungarian", "R") :  "E:/fastf1_csv_data/models/Hungarian Grand Prix.h5",
-    ("Italian", "R") : "E:/fastf1_csv_data/models/Italian Grand Prix.h5",
-    ("Japanese", "R") : "E:/fastf1_csv_data/models/Japanese Grand Prix.h5",
-    ("Las Vegas", "R") : "E:/fastf1_csv_data/models/Las Vegas Grand Prix.h5",
-    ("Mexico City", "R") : "E:/fastf1_csv_data/models/Mexico City Grand Prix.h5",
-    ("Miami", "R") :  "E:/fastf1_csv_data/models/Miami Grand Prix.h5",
-    ("Monaco","R") :  "E:/fastf1_csv_data/models/Miami Grand Prix.h5",
-    ("Portuguese","R") : "E:/fastf1_csv_data/models/Miami Grand Prix.h5",
-    ("Qatar", "R") :  "E:/fastf1_csv_data/models/Miami Grand Prix.h5",
-    ("Russian", "R") : "E:/fastf1_csv_data/models/Russian Grand Prix.h5",
-    ("Sao Paulo", "R") : "E:/fastf1_csv_data/models/São Paulo Grand Prix.h5",
-    ("Saudi Arabian", "R") :  "E:/fastf1_csv_data/models/Saudi Arabian Grand Prix.h5",
-    ("Singapore", "R") :  "E:/fastf1_csv_data/models/Singapore Grand Prix.h5",
-    ("Spanish", "R") : "E:/fastf1_csv_data/models/Spanish Grand Prix.h5",
-    ("United States", "R") : "E:/fastf1_csv_data/models/United States Grand Prix.h5"
+    ("Bahrain", "R"): "E:/HM/models/Bahrain Grand Prix_Race.h5",
+    ("Belgian", "R"): "E:/HM/models/Belgian Grand Prix_Race.h5",
+    ("Austrain", "R") : "E:/HM/models/Austrian Grand Prix_Race.h5.h5",
+    ("Abu Dhabi","R") : "E:/HM/models/Abu Dhabi Grand Prix_Race.h5",
+    ("British", "R") : "E:/HM/models/British Grand Prix.h5",
+    ("Canada", "R") : "E:/HM/models/Canadian Grand Prix.h5",
+    ("Azerbaijan", "R") : "E:/HM/models/Azerbaijan Grand Prix.h5",
+    ("Chinese", "R") : "E:/HM/models/Chinese Grand Prix.h5",
+    ("Dutch", "R") : "E:/HM/models/Dutch Grand Prix.h5",
+    ("Emilia Romagna","R") : "E:/HM/models/Emilia Romagna Grand Prix.h5",
+    ("French", "R") : "E:/HM/models/French Grand Prix.h5",
+    ("Hungarian", "R") :  "E:/HM/models/Hungarian Grand Prix.h5",
+    ("Italian", "R") : "E:/HM/models/Italian Grand Prix.h5",
+    ("Japanese", "R") : "E:/HM/models/Japanese Grand Prix.h5",
+    ("Las Vegas", "R") : "E:/HM/models/Las Vegas Grand Prix.h5",
+    ("Mexico City", "R") : "E:/HM/models/Mexico City Grand Prix.h5",
+    ("Miami", "R") :  "E:/HM/models/Miami Grand Prix.h5",
+    ("Monaco","R") :  "E:/HM/models/Miami Grand Prix.h5",
+    ("Portuguese","R") : "E:/HM/models/Miami Grand Prix.h5",
+    ("Qatar", "R") :  "E:/HM/models/Miami Grand Prix.h5",
+    ("Russian", "R") : "E:/HM/models/Russian Grand Prix.h5",
+    ("Sao Paulo", "R") : "E:/HM/models/São Paulo Grand Prix.h5",
+    ("Saudi Arabian", "R") :  "E:/HM/models/Saudi Arabian Grand Prix.h5",
+    ("Singapore", "R") :  "E:/HM/models/Singapore Grand Prix.h5",
+    ("Spanish", "R") : "E:/HM/models/Spanish Grand Prix.h5",
+    ("United States", "R") : "E:/HM/models/United States Grand Prix.h5"
 
 }
 
@@ -58,7 +58,7 @@ def load_model_for(race, session_type):
     else:
         # fallback or raise
         # for demonstration, just return your existing default model
-        default_path = "E:/fastf1_csv_data/models/2024_Bahrain Grand Prix_Race.h5"
+        default_path = "E:/HM/models/2024_Bahrain Grand Prix_Race.h5"
         return load_model(default_path, custom_objects={"LeakyReLU": LeakyReLU, "mse": MeanSquaredError()})
 
 
