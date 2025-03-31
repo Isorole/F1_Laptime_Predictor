@@ -9,4 +9,5 @@ The data is from FastF1 API.
 You can compare real lap times with predicted lap times 
 ![dutch comparison](https://github.com/user-attachments/assets/cf0d9818-5c59-456c-82fb-cf422e092bcb)
 
-
+To install the depencies:
+pip install flask fastf1 numpy pandas tensorflow keras
