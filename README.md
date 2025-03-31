@@ -11,3 +11,10 @@ You can compare real lap times with predicted lap times
 
 To install the depencies:
 pip install flask fastf1 numpy pandas tensorflow keras
+Might also be more such as MeanSquaredError, load_model, LeakyReLU etc.
+Also change the directories in ANN models, and FastF1 cache.
+
+Reference:
+https://ijsrem.com/download/predicting-lap-times-of-formula-1-races-using-ann/
+
+
