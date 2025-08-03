@@ -16,32 +16,32 @@ fastf1.Cache.enable_cache("E:/python codes/cache")
 # A dictionary of model paths keyed by (race, session)
 # so you can pick the correct model automatically
 MODEL_PATHS = {
-    ("Bahrain", "R"): "E:/HM/models/Bahrain Grand Prix_Race.h5",
-    ("Belgian", "R"): "E:/HM/models/Belgian Grand Prix_Race.h5",
-    ("Austrain", "R") : "E:/HM/models/Austrian Grand Prix_Race.h5.h5",
-    ("Abu Dhabi","R") : "E:/HM/models/Abu Dhabi Grand Prix_Race.h5",
-    ("British", "R") : "E:/HM/models/British Grand Prix.h5",
-    ("Canada", "R") : "E:/HM/models/Canadian Grand Prix.h5",
-    ("Azerbaijan", "R") : "E:/HM/models/Azerbaijan Grand Prix.h5",
-    ("Chinese", "R") : "E:/HM/models/Chinese Grand Prix.h5",
-    ("Dutch", "R") : "E:/HM/models/Dutch Grand Prix.h5",
-    ("Emilia Romagna","R") : "E:/HM/models/Emilia Romagna Grand Prix.h5",
-    ("French", "R") : "E:/HM/models/French Grand Prix.h5",
-    ("Hungarian", "R") :  "E:/HM/models/Hungarian Grand Prix.h5",
-    ("Italian", "R") : "E:/HM/models/Italian Grand Prix.h5",
-    ("Japanese", "R") : "E:/HM/models/Japanese Grand Prix.h5",
-    ("Las Vegas", "R") : "E:/HM/models/Las Vegas Grand Prix.h5",
-    ("Mexico City", "R") : "E:/HM/models/Mexico City Grand Prix.h5",
-    ("Miami", "R") :  "E:/HM/models/Miami Grand Prix.h5",
-    ("Monaco","R") :  "E:/HM/models/Miami Grand Prix.h5",
-    ("Portuguese","R") : "E:/HM/models/Miami Grand Prix.h5",
-    ("Qatar", "R") :  "E:/HM/models/Miami Grand Prix.h5",
-    ("Russian", "R") : "E:/HM/models/Russian Grand Prix.h5",
-    ("Sao Paulo", "R") : "E:/HM/models/São Paulo Grand Prix.h5",
-    ("Saudi Arabian", "R") :  "E:/HM/models/Saudi Arabian Grand Prix.h5",
-    ("Singapore", "R") :  "E:/HM/models/Singapore Grand Prix.h5",
-    ("Spanish", "R") : "E:/HM/models/Spanish Grand Prix.h5",
-    ("United States", "R") : "E:/HM/models/United States Grand Prix.h5"
+    ("Bahrain", "R"): "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Bahrain Grand Prix_Race.keras",
+    ("Belgian", "R"): "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Belgian Grand Prix_Race.keras",
+    ("Austrain", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Austrian Grand Prix_Race.keras",
+    ("Abu Dhabi","R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Abu Dhabi Grand Prix_Race.keras",
+    ("British", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\British Grand Prix.keras",
+    ("Canada", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Canadian Grand Prix.keras",
+    ("Azerbaijan", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Azerbaijan Grand Prix.keras",
+    ("Chinese", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Chinese Grand Prix.keras",
+    ("Dutch", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Dutch Grand Prix.keras",
+    ("Emilia Romagna","R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Emilia Romagna Grand Prix.keras",
+    ("French", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\French Grand Prix.keras",
+    ("Hungarian", "R") :  "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Hungarian Grand Prix.keras",
+    ("Italian", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Italian Grand Prix.keras",
+    ("Japanese", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Japanese Grand Prix.keras",
+    ("Las Vegas", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Las Vegas Grand Prix.keras",
+    ("Mexico City", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Mexico City Grand Prix.keras",
+    ("Miami", "R") :  "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Miami Grand Prix.keras",
+    ("Monaco","R") :  "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Monaco Grand Prix.keras",
+    ("Portuguese","R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Portuguese Grand Prix.keras",
+    ("Qatar", "R") :  "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Qatar Grand Prix.keras",
+    ("Russian", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Russian Grand Prix.keras",
+    ("Sao Paulo", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\São Paulo Grand Prix.keras",
+    ("Saudi Arabian", "R") :  "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Saudi Arabian Grand Prix.keras",
+    ("Singapore", "R") :  "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Singapore Grand Prix.keras",
+    ("Spanish", "R") : "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Spanish Grand Prix.keras",
+    ("United States", "R") : "E:\\HM\\F1_Laptime_Predictor-main\\HM\\models\\converted_models\\United States Grand Prix.keras"
 
 }
 
@@ -58,7 +58,7 @@ def load_model_for(race, session_type):
     else:
         # fallback or raise
         # for demonstration, just return your existing default model
-        default_path = "E:/HM/models/2024_Bahrain Grand Prix_Race.h5"
+        default_path = "E:\HM\F1_Laptime_Predictor-main\HM\models\converted_models\Bahrain Grand Prix_Race.keras"
         return load_model(default_path, custom_objects={"LeakyReLU": LeakyReLU, "mse": MeanSquaredError()})
 
 
